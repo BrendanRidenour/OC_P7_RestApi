@@ -1,4 +1,4 @@
-﻿namespace Poseidon.RestApi
+﻿namespace Poseidon.RestApi.Data
 {
     public class InMemoryCrudStore<T> : ICrudStore<T>
         where T : Internal.EntityBase

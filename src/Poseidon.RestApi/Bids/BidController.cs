@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Poseidon.RestApi.Data;
 using Poseidon.RestApi.Internal;
 
 namespace Poseidon.RestApi.Bids

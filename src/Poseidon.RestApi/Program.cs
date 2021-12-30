@@ -1,8 +1,8 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
-using Poseidon.RestApi;
 using Poseidon.RestApi.Bids;
 using Poseidon.RestApi.CurvePoints;
+using Poseidon.RestApi.Data;
 using Poseidon.RestApi.Ratings;
 using Poseidon.RestApi.Rules;
 using Poseidon.RestApi.Trades;
