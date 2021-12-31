@@ -14,23 +14,6 @@ namespace Poseidon.RestApi.Ratings
                 .IsAssignableFrom(typeof(RatingEntityValidator)));
         }
 
-        [Theory]
-        [InlineData(null)]
-        [InlineData("")]
-        [InlineData(" ")]
-        public void MoodysRatingEmpty(string? value)
-        {
-            var entity = CreateEntity(moodysRating: value!);
-
-            var result = CreateValidator().Validate(entity);
-
-            var errors = result.Errors
-                .Where(e => e.PropertyName == nameof(RatingEntity.MoodysRating));
-
-            var error = Assert.Single(errors);
-            Assert.Equal("MoodysRatingEmpty", error.ErrorCode);
-        }
-
         [Fact]
         public void MoodysRatingMaxLength125()
         {
@@ -45,23 +28,6 @@ namespace Poseidon.RestApi.Ratings
             Assert.Equal("MoodysRatingMaxLength125", error.ErrorCode);
         }
 
-        [Theory]
-        [InlineData(null)]
-        [InlineData("")]
-        [InlineData(" ")]
-        public void SandPRatingEmpty(string? value)
-        {
-            var entity = CreateEntity(sandPRating: value!);
-
-            var result = CreateValidator().Validate(entity);
-
-            var errors = result.Errors
-                .Where(e => e.PropertyName == nameof(RatingEntity.SandPRating));
-
-            var error = Assert.Single(errors);
-            Assert.Equal("SandPRatingEmpty", error.ErrorCode);
-        }
-
         [Fact]
         public void SandPRatingMaxLength125()
         {
@@ -74,23 +40,6 @@ namespace Poseidon.RestApi.Ratings
 
             var error = Assert.Single(errors);
             Assert.Equal("SandPRatingMaxLength125", error.ErrorCode);
-        }
-
-        [Theory]
-        [InlineData(null)]
-        [InlineData("")]
-        [InlineData(" ")]
-        public void FitchRatingEmpty(string? value)
-        {
-            var entity = CreateEntity(fitchRating: value!);
-
-            var result = CreateValidator().Validate(entity);
-
-            var errors = result.Errors
-                .Where(e => e.PropertyName == nameof(RatingEntity.FitchRating));
-
-            var error = Assert.Single(errors);
-            Assert.Equal("FitchRatingEmpty", error.ErrorCode);
         }
 
         [Fact]

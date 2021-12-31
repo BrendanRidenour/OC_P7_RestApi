@@ -23,13 +23,33 @@ builder.Services.AddTransient<ICrudStore<TradeEntity>, InMemoryCrudStore<TradeEn
 builder.Services.AddTransient<ICrudStore<UserEntity>, InMemoryCrudStore<UserEntity>>()
     .AddTransient<IValidator<UserEntity>, UserEntityValidator>();
 
-builder.Services.AddControllers()
-    .AddFluentValidation();
+builder.Services.AddControllers(mvc =>
+{
+    mvc.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
+}).AddFluentValidation();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-app.MapControllers();
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
 
-app.MapGet("/", context => context.Response.WriteAsync("Hello world"));
+    app.MapGet("/", context =>
+    {
+        context.Response.Redirect("/swagger");
+
+        return Task.CompletedTask;
+    });
+}
+
+app.UseHttpsRedirection();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapControllers();
 
 app.Run();

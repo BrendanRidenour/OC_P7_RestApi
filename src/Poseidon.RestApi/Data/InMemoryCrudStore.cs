@@ -7,7 +7,9 @@
 
         public Task<T> Create(T entity)
         {
-            entity.Id = Store.Max(x => x.Id) + 1;
+            var maxId = Store.Any() ? Store.Max(x => x.Id) : 0;
+
+            entity.Id = maxId + 1;
 
             Store.Add(entity);
 

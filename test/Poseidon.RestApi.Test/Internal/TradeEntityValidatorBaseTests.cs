@@ -78,23 +78,6 @@ namespace Poseidon.RestApi.Internal
             Assert.Equal("TypeMaxLength30", error.ErrorCode);
         }
 
-        [Theory]
-        [InlineData(null)]
-        [InlineData("")]
-        [InlineData(" ")]
-        public void BenchmarkEmpty(string? value)
-        {
-            var entity = CreateEntity(benchmark: value!);
-
-            var result = CreateValidator().Validate(entity);
-
-            var errors = result.Errors
-                .Where(e => e.PropertyName == nameof(TradeEntity.Benchmark));
-
-            var error = Assert.Single(errors);
-            Assert.Equal("BenchmarkEmpty", error.ErrorCode);
-        }
-
         [Fact]
         public void BenchmarkMaxLength125()
         {
@@ -107,23 +90,6 @@ namespace Poseidon.RestApi.Internal
 
             var error = Assert.Single(errors);
             Assert.Equal("BenchmarkMaxLength125", error.ErrorCode);
-        }
-
-        [Theory]
-        [InlineData(null)]
-        [InlineData("")]
-        [InlineData(" ")]
-        public void SecurityEmpty(string? value)
-        {
-            var entity = CreateEntity(security: value!);
-
-            var result = CreateValidator().Validate(entity);
-
-            var errors = result.Errors
-                .Where(e => e.PropertyName == nameof(TradeEntity.Security));
-
-            var error = Assert.Single(errors);
-            Assert.Equal("SecurityEmpty", error.ErrorCode);
         }
 
         [Fact]
@@ -140,23 +106,6 @@ namespace Poseidon.RestApi.Internal
             Assert.Equal("SecurityMaxLength125", error.ErrorCode);
         }
 
-        [Theory]
-        [InlineData(null)]
-        [InlineData("")]
-        [InlineData(" ")]
-        public void StatusEmpty(string? value)
-        {
-            var entity = CreateEntity(status: value!);
-
-            var result = CreateValidator().Validate(entity);
-
-            var errors = result.Errors
-                .Where(e => e.PropertyName == nameof(TradeEntity.Status));
-
-            var error = Assert.Single(errors);
-            Assert.Equal("StatusEmpty", error.ErrorCode);
-        }
-
         [Fact]
         public void StatusMaxLength10()
         {
@@ -169,23 +118,6 @@ namespace Poseidon.RestApi.Internal
 
             var error = Assert.Single(errors);
             Assert.Equal("StatusMaxLength10", error.ErrorCode);
-        }
-
-        [Theory]
-        [InlineData(null)]
-        [InlineData("")]
-        [InlineData(" ")]
-        public void TraderEmpty(string? value)
-        {
-            var entity = CreateEntity(trader: value!);
-
-            var result = CreateValidator().Validate(entity);
-
-            var errors = result.Errors
-                .Where(e => e.PropertyName == nameof(TradeEntity.Trader));
-
-            var error = Assert.Single(errors);
-            Assert.Equal("TraderEmpty", error.ErrorCode);
         }
 
         [Fact]
@@ -202,23 +134,6 @@ namespace Poseidon.RestApi.Internal
             Assert.Equal("TraderMaxLength125", error.ErrorCode);
         }
 
-        [Theory]
-        [InlineData(null)]
-        [InlineData("")]
-        [InlineData(" ")]
-        public void BookEmpty(string? value)
-        {
-            var entity = CreateEntity(book: value!);
-
-            var result = CreateValidator().Validate(entity);
-
-            var errors = result.Errors
-                .Where(e => e.PropertyName == nameof(TradeEntity.Book));
-
-            var error = Assert.Single(errors);
-            Assert.Equal("BookEmpty", error.ErrorCode);
-        }
-
         [Fact]
         public void BookMaxLength125()
         {
@@ -231,23 +146,6 @@ namespace Poseidon.RestApi.Internal
 
             var error = Assert.Single(errors);
             Assert.Equal("BookMaxLength125", error.ErrorCode);
-        }
-
-        [Theory]
-        [InlineData(null)]
-        [InlineData("")]
-        [InlineData(" ")]
-        public void CreationNameEmpty(string? value)
-        {
-            var entity = CreateEntity(creationName: value!);
-
-            var result = CreateValidator().Validate(entity);
-
-            var errors = result.Errors
-                .Where(e => e.PropertyName == nameof(TradeEntity.CreationName));
-
-            var error = Assert.Single(errors);
-            Assert.Equal("CreationNameEmpty", error.ErrorCode);
         }
 
         [Fact]
@@ -264,23 +162,6 @@ namespace Poseidon.RestApi.Internal
             Assert.Equal("CreationNameMaxLength125", error.ErrorCode);
         }
 
-        [Theory]
-        [InlineData(null)]
-        [InlineData("")]
-        [InlineData(" ")]
-        public void RevisionNameEmpty(string? value)
-        {
-            var entity = CreateEntity(revisionName: value!);
-
-            var result = CreateValidator().Validate(entity);
-
-            var errors = result.Errors
-                .Where(e => e.PropertyName == nameof(TradeEntity.RevisionName));
-
-            var error = Assert.Single(errors);
-            Assert.Equal("RevisionNameEmpty", error.ErrorCode);
-        }
-
         [Fact]
         public void RevisionNameMaxLength125()
         {
@@ -293,23 +174,6 @@ namespace Poseidon.RestApi.Internal
 
             var error = Assert.Single(errors);
             Assert.Equal("RevisionNameMaxLength125", error.ErrorCode);
-        }
-
-        [Theory]
-        [InlineData(null)]
-        [InlineData("")]
-        [InlineData(" ")]
-        public void DealNameEmpty(string? value)
-        {
-            var entity = CreateEntity(dealName: value!);
-
-            var result = CreateValidator().Validate(entity);
-
-            var errors = result.Errors
-                .Where(e => e.PropertyName == nameof(TradeEntity.DealName));
-
-            var error = Assert.Single(errors);
-            Assert.Equal("DealNameEmpty", error.ErrorCode);
         }
 
         [Fact]
@@ -326,23 +190,6 @@ namespace Poseidon.RestApi.Internal
             Assert.Equal("DealNameMaxLength125", error.ErrorCode);
         }
 
-        [Theory]
-        [InlineData(null)]
-        [InlineData("")]
-        [InlineData(" ")]
-        public void DealTypeEmpty(string? value)
-        {
-            var entity = CreateEntity(dealType: value!);
-
-            var result = CreateValidator().Validate(entity);
-
-            var errors = result.Errors
-                .Where(e => e.PropertyName == nameof(TradeEntity.DealType));
-
-            var error = Assert.Single(errors);
-            Assert.Equal("DealTypeEmpty", error.ErrorCode);
-        }
-
         [Fact]
         public void DealTypeMaxLength125()
         {
@@ -357,23 +204,6 @@ namespace Poseidon.RestApi.Internal
             Assert.Equal("DealTypeMaxLength125", error.ErrorCode);
         }
 
-        [Theory]
-        [InlineData(null)]
-        [InlineData("")]
-        [InlineData(" ")]
-        public void SourceListIdEmpty(string? value)
-        {
-            var entity = CreateEntity(sourceListId: value!);
-
-            var result = CreateValidator().Validate(entity);
-
-            var errors = result.Errors
-                .Where(e => e.PropertyName == nameof(TradeEntity.SourceListId));
-
-            var error = Assert.Single(errors);
-            Assert.Equal("SourceListIdEmpty", error.ErrorCode);
-        }
-
         [Fact]
         public void SourceListIdMaxLength125()
         {
@@ -386,23 +216,6 @@ namespace Poseidon.RestApi.Internal
 
             var error = Assert.Single(errors);
             Assert.Equal("SourceListIdMaxLength125", error.ErrorCode);
-        }
-
-        [Theory]
-        [InlineData(null)]
-        [InlineData("")]
-        [InlineData(" ")]
-        public void SideEmpty(string? value)
-        {
-            var entity = CreateEntity(side: value!);
-
-            var result = CreateValidator().Validate(entity);
-
-            var errors = result.Errors
-                .Where(e => e.PropertyName == nameof(TradeEntity.Side));
-
-            var error = Assert.Single(errors);
-            Assert.Equal("SideEmpty", error.ErrorCode);
         }
 
         [Fact]

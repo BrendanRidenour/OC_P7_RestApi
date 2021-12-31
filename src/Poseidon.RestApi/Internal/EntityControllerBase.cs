@@ -19,8 +19,8 @@ namespace Poseidon.RestApi.Internal
         public virtual async Task<ActionResult<T>> Create([FromBody]T entity)
         {
             entity = await this.CrudStore.Create(entity);
-
-            return CreatedAtAction(nameof(Read), entity);
+            
+            return CreatedAtAction(nameof(Read), new { id = entity.Id }, entity);
         }
 
         [HttpGet]
@@ -40,17 +40,11 @@ namespace Poseidon.RestApi.Internal
         public virtual async Task<ActionResult> Update([FromRoute]int id,
             [FromBody]T entity)
         {
-            if (id != entity.Id)
-            {
-                ModelState.AddModelError(nameof(entity.Id),
-                    $"The id of the endpoint ('{id}') does not match the id of the entity to update ('{entity.Id}')");
-
-                return BadRequest(ModelState);
-            }
-
             var existingEntity = await this.CrudStore.Read(id);
             if (existingEntity is null)
                 return NotFound();
+
+            entity.Id = id;
 
             await this.CrudStore.Update(entity);
 

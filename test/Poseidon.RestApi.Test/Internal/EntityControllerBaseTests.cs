@@ -84,6 +84,7 @@ namespace Poseidon.RestApi.Internal
 
             var createdResult = Assert.IsType<CreatedAtActionResult>(actionResult.Result);
             Assert.Equal("Read", createdResult.ActionName);
+            Assert.Equal(entity.Id, createdResult.RouteValues!["id"]);
             Assert.Equal(crudStore.Create_Result, createdResult.Value);
         }
 
@@ -190,19 +191,6 @@ namespace Poseidon.RestApi.Internal
         }
 
         [Fact]
-        public async Task Update_IdDoesNotMatchEntityId_ReturnsBadRequest()
-        {
-            var crudStore = CrudStore();
-            var controller = Controller(crudStore);
-            var entity = CreateEntity();
-            entity.Id = 2;
-
-            var result = await controller.Update(id: 1, entity);
-
-            Assert.IsType<BadRequestObjectResult>(result);
-        }
-
-        [Fact]
         public async Task Update_CallToReadOnCrudStoreReturnsNull_ReturnsNotFound()
         {
             var crudStore = CrudStore();
@@ -215,16 +203,19 @@ namespace Poseidon.RestApi.Internal
             Assert.IsType<NotFoundResult>(actionResult);
         }
 
-        [Fact]
-        public async Task Update_WhenCalled_CallsUpdateOnCrudStore()
+        [Theory]
+        [InlineData(1)]
+        [InlineData(2)]
+        public async Task Update_WhenCalled_CallsUpdateOnCrudStoreWithCorrectId(int id)
         {
             var crudStore = CrudStore();
             var controller = Controller(crudStore);
-            var entity = CreateEntity();
+            var entity = CreateEntity(id: 0);
 
-            await controller.Update(id: 1, entity);
+            await controller.Update(id, entity);
 
             Assert.Equal(entity, crudStore.Update_InputEntity);
+            Assert.Equal(id, crudStore.Update_InputEntity!.Id);
         }
 
         [Fact]

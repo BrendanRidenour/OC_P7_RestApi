@@ -24,8 +24,6 @@ namespace Poseidon.RestApi.Bids
                 .WithErrorCode("AskLessThanZero");
 
             RuleFor(e => e.Commentary)
-                .NotEmpty()
-                .WithErrorCode("CommentaryEmpty")
                 .MaximumLength(125)
                 .WithErrorCode("CommentaryMaxLength125");
         }
