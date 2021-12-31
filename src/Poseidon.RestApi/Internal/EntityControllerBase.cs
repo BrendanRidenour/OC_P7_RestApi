@@ -16,8 +16,12 @@ namespace Poseidon.RestApi.Internal
         }
 
         [HttpPost]
-        public virtual async Task<ActionResult<T>> Create([FromBody]T entity) =>
-            await this.CrudStore.Create(entity);
+        public virtual async Task<ActionResult<T>> Create([FromBody]T entity)
+        {
+            entity = await this.CrudStore.Create(entity);
+
+            return CreatedAtAction(nameof(Read), entity);
+        }
 
         [HttpGet]
         [Route("{id}")]
@@ -33,7 +37,7 @@ namespace Poseidon.RestApi.Internal
 
         [HttpPut]
         [Route("{id}")]
-        public virtual async Task<ActionResult<T>> Update([FromRoute]int id,
+        public virtual async Task<ActionResult> Update([FromRoute]int id,
             [FromBody]T entity)
         {
             if (id != entity.Id)
@@ -44,11 +48,27 @@ namespace Poseidon.RestApi.Internal
                 return BadRequest(ModelState);
             }
 
-            return await this.CrudStore.Update(entity);
+            var existingEntity = await this.CrudStore.Read(id);
+            if (existingEntity is null)
+                return NotFound();
+
+            await this.CrudStore.Update(entity);
+
+            return NoContent();
         }
 
         [HttpDelete]
         [Route("{id}")]
-        public virtual Task Delete([FromRoute]int id) => this.CrudStore.Delete(id);
+        public virtual async Task<ActionResult> Delete([FromRoute]int id)
+        {
+            var entity = await this.CrudStore.Read(id);
+
+            if (entity is null)
+                return NotFound();
+
+            await this.CrudStore.Delete(id);
+
+            return NoContent();
+        }
     }
 }

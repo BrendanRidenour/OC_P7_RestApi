@@ -74,15 +74,17 @@ namespace Poseidon.RestApi.Internal
         }
 
         [Fact]
-        public async Task Create_WhenCalled_ReturnsEntityFromCrudStore()
+        public async Task Create_WhenCalled_ReturnsCreatedAtActionResult()
         {
             var crudStore = CrudStore();
             var controller = Controller(crudStore);
             var entity = CreateEntity();
 
-            var result = await controller.Create(entity);
+            var actionResult = await controller.Create(entity);
 
-            Assert.Equal(crudStore.Create_Result, result.Value);
+            var createdResult = Assert.IsType<CreatedAtActionResult>(actionResult.Result);
+            Assert.Equal("Read", createdResult.ActionName);
+            Assert.Equal(crudStore.Create_Result, createdResult.Value);
         }
 
         [Fact]
@@ -197,7 +199,20 @@ namespace Poseidon.RestApi.Internal
 
             var result = await controller.Update(id: 1, entity);
 
-            Assert.IsType<BadRequestObjectResult>(result.Result);
+            Assert.IsType<BadRequestObjectResult>(result);
+        }
+
+        [Fact]
+        public async Task Update_CallToReadOnCrudStoreReturnsNull_ReturnsNotFound()
+        {
+            var crudStore = CrudStore();
+            crudStore.Read_Result = null;
+            var controller = Controller(crudStore);
+            var entity = CreateEntity();
+
+            var actionResult = await controller.Update(id: 1, entity);
+
+            Assert.IsType<NotFoundResult>(actionResult);
         }
 
         [Fact]
@@ -213,7 +228,7 @@ namespace Poseidon.RestApi.Internal
         }
 
         [Fact]
-        public async Task Update_WhenCalled_ReturnsEntityFromCrudStore()
+        public async Task Update_WhenCalled_ReturnsNoContent()
         {
             var crudStore = CrudStore();
             var controller = Controller(crudStore);
@@ -221,7 +236,7 @@ namespace Poseidon.RestApi.Internal
 
             var result = await controller.Update(id: 1, entity);
 
-            Assert.Equal(crudStore.Update_Result, result.Value);
+            Assert.IsType<NoContentResult>(result);
         }
 
         [Fact]
@@ -252,6 +267,18 @@ namespace Poseidon.RestApi.Internal
             Assert.NotNull(attribute);
         }
 
+        [Fact]
+        public async Task Delete_ReadOnCrudStoreReturnsNull_ReturnsNotFound()
+        {
+            var crudStore = CrudStore();
+            crudStore.Read_Result = null;
+            var controller = Controller(crudStore);
+
+            var result = await controller.Delete(id: 1);
+
+            Assert.IsType<NotFoundResult>(result);
+        }
+
         [Theory]
         [InlineData(1)]
         [InlineData(2)]
@@ -263,6 +290,17 @@ namespace Poseidon.RestApi.Internal
             await controller.Delete(id);
 
             Assert.Equal(id, crudStore.Delete_InputId);
+        }
+
+        [Fact]
+        public async Task Delete_WhenCalled_ReturnsNoContent()
+        {
+            var crudStore = CrudStore();
+            var controller = Controller(crudStore);
+
+            var result = await controller.Delete(id: 1);
+
+            Assert.IsType<NoContentResult>(result);
         }
 
         private static MockCrudStore CrudStore() => new MockCrudStore();
