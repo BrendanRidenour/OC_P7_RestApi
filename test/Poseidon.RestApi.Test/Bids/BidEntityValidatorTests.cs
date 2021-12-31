@@ -1,8 +1,8 @@
 ﻿using FluentValidation;
 using System;
 using System.Linq;
-using System.Text;
 using Xunit;
+using static Poseidon.RestApi.TestHelpers;
 
 namespace Poseidon.RestApi.Bids
 {
@@ -359,14 +359,5 @@ namespace Poseidon.RestApi.Bids
                 SourceListId = sourceListId,
                 Side = side,
             };
-        private static string CreateString(int length)
-        {
-            var builder = new StringBuilder();
-
-            for (var i = 0; i < length; i++)
-                builder.Append('0');
-
-            return builder.ToString();
-        }
     }
 }

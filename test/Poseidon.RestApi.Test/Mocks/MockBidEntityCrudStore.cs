@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Poseidon.RestApi.Mocks
 {
-    public class MockCrudStore : ICrudStore<BidEntity>
+    public class MockBidEntityCrudStore : ICrudStore<BidEntity>
     {
         public BidEntity? Create_InputEntity;
         public BidEntity? Create_Result;

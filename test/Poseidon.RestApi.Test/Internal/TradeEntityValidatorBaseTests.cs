@@ -2,8 +2,8 @@
 using Poseidon.RestApi.Trades;
 using System;
 using System.Linq;
-using System.Text;
 using Xunit;
+using static Poseidon.RestApi.TestHelpers;
 
 namespace Poseidon.RestApi.Internal
 {
@@ -280,15 +280,6 @@ namespace Poseidon.RestApi.Internal
                 SourceListId = sourceListId,
                 Side = side,
             };
-        private static string CreateString(int length)
-        {
-            var builder = new StringBuilder();
-
-            for (var i = 0; i < length; i++)
-                builder.Append('0');
-
-            return builder.ToString();
-        }
 
         private class TestTradeEntityValidatorBase
             : TradeEntityValidatorBase<TradeEntity>

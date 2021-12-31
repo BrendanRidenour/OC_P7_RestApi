@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 
 namespace Poseidon.RestApi
 {
@@ -31,5 +32,15 @@ namespace Poseidon.RestApi
         public static TAttribute GetPropertyAttribute<TType, TAttribute>(string propertyName)
             where TAttribute : Attribute =>
             typeof(TType).GetProperty(propertyName)!.GetCustomAttribute<TAttribute>()!;
+
+        public static string CreateString(int length)
+        {
+            var builder = new StringBuilder();
+
+            for (var i = 0; i < length; i++)
+                builder.Append('0');
+
+            return builder.ToString();
+        }
     }
 }

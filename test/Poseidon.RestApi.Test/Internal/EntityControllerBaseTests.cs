@@ -11,7 +11,7 @@ namespace Poseidon.RestApi.Internal
     public class EntityControllerBaseTests
     {
         [Fact]
-        public void InheritsAbstractValidator()
+        public void InheritsControllerBase()
         {
             Assert.True(typeof(ControllerBase)
                 .IsAssignableFrom(typeof(EntityControllerBase<BidEntity>)));
@@ -294,8 +294,8 @@ namespace Poseidon.RestApi.Internal
             Assert.IsType<NoContentResult>(result);
         }
 
-        private static MockCrudStore CrudStore() => new MockCrudStore();
-        private static TestEntityControllerBase Controller(MockCrudStore? crudStore = null) =>
+        private static MockBidEntityCrudStore CrudStore() => new MockBidEntityCrudStore();
+        private static TestEntityControllerBase Controller(MockBidEntityCrudStore? crudStore = null) =>
             new TestEntityControllerBase(crudStore ?? CrudStore());
         private static BidEntity CreateEntity(
             int id = 1,
@@ -348,9 +348,9 @@ namespace Poseidon.RestApi.Internal
 
         private class TestEntityControllerBase : EntityControllerBase<BidEntity>
         {
-            new public MockCrudStore CrudStore => (MockCrudStore)base.CrudStore;
+            new public MockBidEntityCrudStore CrudStore => (MockBidEntityCrudStore)base.CrudStore;
 
-            public TestEntityControllerBase(MockCrudStore crudStore)
+            public TestEntityControllerBase(MockBidEntityCrudStore crudStore)
                 : base(crudStore)
             { }
         }
