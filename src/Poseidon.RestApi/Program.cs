@@ -1,6 +1,5 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Internal;
 using Microsoft.IdentityModel.Tokens;
 using Poseidon.RestApi.Bids;
@@ -30,7 +29,8 @@ builder.Services.AddTransient<ICrudStore<TradeEntity>, InMemoryCrudStore<TradeEn
     .AddTransient<IValidator<TradeEntity>, TradeEntityValidator>();
 builder.Services.AddTransient<ICrudStore<UserEntity>, InMemoryCrudStore<UserEntity>>()
     .AddTransient<IValidator<UserEntity>, UserEntityValidator>();
-builder.Services.AddTransient<IValidator<LoginCredentials>, LoginCredentialsValidator>();
+builder.Services.AddTransient<IReadOperation<Username, UserEntity>, InMemoryCrudStore<UserEntity>>()
+    .AddTransient<IValidator<LoginCredentials>, LoginCredentialsValidator>();
 
 var jwtConfig = new JwtConfiguration(
     key: builder.Configuration["Authentication:Jwt:Key"],
@@ -53,6 +53,7 @@ builder.Services.AddAuthentication(jwtConfig.AuthenticationScheme)
             IssuerSigningKey = jwtConfig.IssuerSigningKey,
         };
     });
+builder.Services.AddTransient<IJwtAuthenticationService, JwtAuthenticationService>();
 
 builder.Services.AddControllers(mvc =>
 {
