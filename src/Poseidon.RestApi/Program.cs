@@ -2,6 +2,7 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.Extensions.Internal;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Poseidon.RestApi.Bids;
 using Poseidon.RestApi.CurvePoints;
 using Poseidon.RestApi.Data;
@@ -58,16 +59,39 @@ builder.Services.AddTransient<IJwtAuthenticationService, JwtAuthenticationServic
 builder.Services.AddControllers(mvc =>
 {
     mvc.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
-    
+
     var dataAnnotationsModelValidatorProvider = mvc.ModelValidatorProviders
         .SingleOrDefault(p => p.GetType().FullName == "Microsoft.AspNetCore.Mvc.DataAnnotations.DataAnnotationsModelValidatorProvider");
-    
+
     if (dataAnnotationsModelValidatorProvider is not null)
         mvc.ModelValidatorProviders.Remove(dataAnnotationsModelValidatorProvider);
 })
     .AddFluentValidation();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(swagger =>
+{
+    swagger.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+    {
+        In = ParameterLocation.Header,
+        Description = "Add a valid token",
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        BearerFormat = "JWT",
+        Scheme = "bearer",
+    });
+    swagger.AddSecurityRequirement(new OpenApiSecurityRequirement()
+    {{
+        new OpenApiSecurityScheme()
+        {
+            Reference = new OpenApiReference()
+            {
+                Type = ReferenceType.SecurityScheme,
+                Id = "Bearer",
+            }
+        },
+        Array.Empty<string>()
+    }});
+});
 
 var app = builder.Build();
 

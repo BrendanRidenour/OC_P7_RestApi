@@ -1,10 +1,20 @@
-﻿using Poseidon.RestApi.Internal;
+﻿using Microsoft.AspNetCore.Authorization;
+using Poseidon.RestApi.Internal;
 using Xunit;
+using static Poseidon.RestApi.TestHelpers;
 
 namespace Poseidon.RestApi.CurvePoints
 {
     public class CurvePointControllerTests
     {
+        [Fact]
+        public void HasAuthorizeAttribute()
+        {
+            var attribute = GetClassAttribute<CurvePointController, AuthorizeAttribute>();
+
+            Assert.NotNull(attribute);
+        }
+
         [Fact]
         public void InheritsAbstractValidator()
         {

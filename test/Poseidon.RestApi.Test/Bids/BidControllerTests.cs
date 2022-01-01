@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Poseidon.RestApi.Internal;
 using System.Linq;
 using Xunit;
@@ -13,6 +14,14 @@ namespace Poseidon.RestApi.Bids
         {
             Assert.True(typeof(EntityControllerBase<BidEntity>)
                 .IsAssignableFrom(typeof(BidController)));
+        }
+
+        [Fact]
+        public void HasAuthorizeAttribute()
+        {
+            var attribute = GetClassAttribute<BidController, AuthorizeAttribute>();
+
+            Assert.NotNull(attribute);
         }
 
         [Fact]
