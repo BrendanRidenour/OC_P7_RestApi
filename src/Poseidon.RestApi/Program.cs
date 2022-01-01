@@ -29,6 +29,7 @@ builder.Services.AddTransient<ICrudStore<RuleEntity>, InMemoryCrudStore<RuleEnti
 builder.Services.AddTransient<ICrudStore<TradeEntity>, InMemoryCrudStore<TradeEntity>>()
     .AddTransient<IValidator<TradeEntity>, TradeEntityValidator>();
 builder.Services.AddTransient<ICrudStore<UserEntity>, InMemoryCrudStore<UserEntity>>()
+    .AddTransient<IValidator<UserData>, UserDataValidator>()
     .AddTransient<IValidator<UserEntity>, UserEntityValidator>();
 builder.Services.AddTransient<IReadOperation<Username, UserEntity>, InMemoryCrudStore<UserEntity>>()
     .AddTransient<IValidator<LoginCredentials>, LoginCredentialsValidator>();

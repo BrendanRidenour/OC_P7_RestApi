@@ -2,10 +2,10 @@
 {
     public class UserData : IUserData
     {
-        public int Id { get; }
-        public string Username { get; }
-        public string Fullname { get; }
-        public string Role { get; }
+        public int Id { get; set; }
+        public string Username { get; set; }
+        public string Fullname { get; set; }
+        public string Role { get; set; }
 
         public UserData(UserEntity entity)
             : this(entity.Id, entity.Username, entity.Fullname, entity.Role)
@@ -18,5 +18,9 @@
             this.Fullname = fullname;
             this.Role = role;
         }
+
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+        public UserData() { }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     }
 }

@@ -11,9 +11,9 @@ namespace Poseidon.RestApi.Internal
     public class EntityControllerBaseTests
     {
         [Fact]
-        public void InheritsControllerBase()
+        public void InheritsEntityControllerHelperBase()
         {
-            Assert.True(typeof(ControllerBase)
+            Assert.True(typeof(EntityControllerHelperBase<BidEntity>)
                 .IsAssignableFrom(typeof(EntityControllerBase<BidEntity>)));
         }
 

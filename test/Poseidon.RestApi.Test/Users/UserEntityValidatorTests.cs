@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using System.Linq;
-using System.Text;
 using Xunit;
 using static Poseidon.RestApi.TestHelpers;
 
@@ -9,9 +8,9 @@ namespace Poseidon.RestApi.Users
     public class UserEntityValidatorTests
     {
         [Fact]
-        public void InheritsAbstractValidator()
+        public void InheritsUserDataValidatorBase()
         {
-            Assert.True(typeof(AbstractValidator<UserEntity>)
+            Assert.True(typeof(UserDataValidatorBase<UserEntity>)
                 .IsAssignableFrom(typeof(UserEntityValidator)));
         }
 

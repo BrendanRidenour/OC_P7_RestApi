@@ -4,16 +4,10 @@ using FluentValidation.Validators;
 
 namespace Poseidon.RestApi.Users
 {
-    public class UserEntityValidator : AbstractValidator<UserEntity>
+    public class UserEntityValidator : UserDataValidatorBase<UserEntity>
     {
         public UserEntityValidator()
         {
-            RuleFor(e => e.Username)
-                .NotEmpty()
-                .WithErrorCode("UsernameEmpty")
-                .MaximumLength(125)
-                .WithErrorCode("UsernameMaxLength125");
-
             RuleFor(e => e.Password)
                 .NotEmpty()
                 .WithErrorCode("PasswordEmpty")
@@ -68,19 +62,7 @@ namespace Poseidon.RestApi.Users
 
                         context.AddFailure(failure);
                     }
-                }); ;
-
-            RuleFor(e => e.Fullname)
-                .NotEmpty()
-                .WithErrorCode("FullnameEmpty")
-                .MaximumLength(125)
-                .WithErrorCode("FullnameMaxLength125");
-
-            RuleFor(e => e.Role)
-                .NotEmpty()
-                .WithErrorCode("RoleEmpty")
-                .MaximumLength(125)
-                .WithErrorCode("RoleMaxLength125");
+                });
         }
     }
 }

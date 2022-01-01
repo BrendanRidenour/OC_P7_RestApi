@@ -2,23 +2,35 @@
 using Microsoft.AspNetCore.Mvc;
 using Poseidon.RestApi.Data;
 using Poseidon.RestApi.Internal;
+using Poseidon.RestApi.Logins;
 
 namespace Poseidon.RestApi.Users
 {
     [Authorize]
-    public class UserController : EntityControllerBase<UserEntity>
+    [ApiController]
+    [Route("[controller]")]
+    public class UserController : EntityControllerHelperBase<UserEntity>
     {
-        public UserController(ICrudStore<UserEntity> crudStore)
-            : base(crudStore)
-        { }
+        private readonly IPasswordHasher _passwordHasher;
 
-        public override async Task<ActionResult<UserEntity>> Create(
-            [FromBody] UserEntity entity)
+        protected override string ReadEntityActionName => nameof(Read);
+
+        public UserController(ICrudStore<UserEntity> crudStore,
+            IPasswordHasher passwordHasher)
+            : base(crudStore)
         {
-            var baseResult = await base.Create(entity);
+            this._passwordHasher = passwordHasher;
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<UserData>> Create([FromBody] UserEntity entity)
+        {
+            entity.Password = this._passwordHasher.Hash(entity.Password);
+
+            var baseResult = await base.CreateEntity(entity);
 
             if (baseResult.Result is not CreatedAtActionResult createdAtResult)
-                return baseResult;
+                throw new InvalidOperationException("Unexpected ActionResult returned from base class");
 
             var userData = new UserData(entity);
 
@@ -29,16 +41,53 @@ namespace Poseidon.RestApi.Users
                 value: userData);
         }
 
-        public override async Task<ActionResult<UserEntity?>> Read([FromRoute] int id)
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<ActionResult<UserData?>> Read([FromRoute] int id)
         {
-            var baseResult = await base.Read(id);
+            var baseResult = await base.ReadEntity(id);
 
             if (baseResult.Value is null)
-                return baseResult;
+                return baseResult.Result!;
 
-            var userData = new UserData(baseResult.Value);
-
-            return Ok(userData);
+            return new UserData(baseResult.Value);
         }
+
+        [HttpPut]
+        [Route("{id}")]
+        public Task<ActionResult> Update([FromRoute] int id, [FromBody] UserData user)
+        {
+            var entity = new UserEntity()
+            {
+                Id = id,
+                Username = user.Username,
+                Fullname = user.Fullname,
+                Role = user.Role,
+                Password = null!,
+            };
+
+            return this.UpdateEntity(id, entity);
+        }
+
+        protected override async Task<ActionResult> UpdateEntity(int id,
+            UserEntity entity)
+        {
+            var existingEntity = await this.CrudStore.Read(id);
+            if (existingEntity is null)
+                return NotFound();
+
+            existingEntity.Id = id;
+            existingEntity.Username = entity.Username;
+            existingEntity.Fullname = entity.Fullname;
+            existingEntity.Role = entity.Role;
+
+            await this.CrudStore.Update(existingEntity);
+
+            return NoContent();
+        }
+
+        [HttpDelete]
+        [Route("{id}")]
+        public Task<ActionResult> Delete([FromRoute] int id) => base.DeleteEntity(id);
     }
 }
