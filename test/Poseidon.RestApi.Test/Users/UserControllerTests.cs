@@ -78,10 +78,13 @@ namespace Poseidon.RestApi.Users
             Assert.Equal(user, userStore.Create_InputEntity);
         }
 
-        [Fact]
-        public async Task Create_WhenCalled_ReturnsCreatedAtAction()
+        [Theory]
+        [InlineData(1)]
+        [InlineData(2)]
+        public async Task Create_WhenCalled_ReturnsCreatedAtAction(int createdId)
         {
             var userStore = UserStore();
+            userStore.Create_Result = UserEntity(id: createdId);
             var controller = Controller(userStore);
             var user = UserEntity();
             var userData = new UserData(user);
@@ -92,9 +95,9 @@ namespace Poseidon.RestApi.Users
                 actionResult.Result);
             Assert.Equal("Read", createdResult.ActionName);
             Assert.Null(createdResult.ControllerName);
-            Assert.Equal(userStore.Create_Result!.Id, createdResult.RouteValues!["id"]);
+            Assert.Equal(createdId, createdResult.RouteValues!["id"]);
             var createdUserData = Assert.IsType<UserData>(createdResult.Value);
-            Assert.Equal(userData.Id, createdUserData.Id);
+            Assert.Equal(createdId, createdUserData.Id);
             Assert.Equal(userData.Username, createdUserData.Username);
             Assert.Equal(userData.Fullname, createdUserData.Fullname);
             Assert.Equal(userData.Role, createdUserData.Role);
@@ -214,7 +217,8 @@ namespace Poseidon.RestApi.Users
             string existingPassword)
         {
             var crudStore = UserStore();
-            crudStore.Read_Result!.Password = existingPassword;
+            crudStore.Read_Result!.Id = id;
+            crudStore.Read_Result.Password = existingPassword;
             var controller = Controller(crudStore);
             var data = UserData(id: 0);
 

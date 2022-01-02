@@ -11,9 +11,10 @@ namespace Poseidon.RestApi.Mocks
         public Task<UserEntity> Create(UserEntity entity)
         {
             this.Create_InputEntity = entity;
-            this.Create_Result = entity;
+            if (this.Create_Result is null)
+                this.Create_Result = entity;
 
-            return Task.FromResult(entity);
+            return Task.FromResult(this.Create_Result);
         }
 
         public int? Read_InputId;

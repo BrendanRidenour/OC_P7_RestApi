@@ -11,14 +11,16 @@ namespace Poseidon.RestApi.Logins
         public string Issuer { get; }
         public SymmetricSecurityKey IssuerSigningKey { get; }
         public string Audience { get; }
-        public TimeSpan ExpiresAfter { get; } = TimeSpan.FromMinutes(30);
+        public TimeSpan ExpiresAfter { get; }
 
-        public JwtConfiguration(string key, string issuer, string audience)
+        public JwtConfiguration(string key, string issuer, string audience,
+            TimeSpan expiresAfter)
         {
             Key = key;
             Issuer = issuer;
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Key));
             Audience = audience;
+            ExpiresAfter = expiresAfter;
         }
     }
 }

@@ -16,6 +16,21 @@ namespace Poseidon.RestApi.Internal
                 .IsAssignableFrom(typeof(EntityControllerHelperBase<BidEntity>)));
         }
 
+        [Theory]
+        [InlineData(1)]
+        [InlineData(2)]
+        public async Task CreateEntity_EntityIsSet_SetsEntityIdToDefault(int id)
+        {
+            var crudStore = CrudStore();
+            var controller = Controller(crudStore);
+            var entity = CreateEntity(id);
+
+            await controller.CreateEntity(entity);
+
+            Assert.NotEqual(id, crudStore.Create_InputEntity!.Id);
+            Assert.Equal(default, crudStore.Create_InputEntity.Id);
+        }
+
         [Fact]
         public async Task CreateEntity_WhenCalled_CallsCreateOnCrudStore()
         {

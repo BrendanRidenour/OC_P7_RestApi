@@ -32,7 +32,7 @@ namespace Poseidon.RestApi.Users
             if (baseResult.Result is not CreatedAtActionResult createdAtResult)
                 throw new InvalidOperationException("Unexpected ActionResult returned from base class");
 
-            var userData = new UserData(entity);
+            var userData = new UserData((UserEntity)createdAtResult.Value!);
 
             return CreatedAtAction(
                 actionName: createdAtResult.ActionName,
@@ -76,7 +76,6 @@ namespace Poseidon.RestApi.Users
             if (existingEntity is null)
                 return NotFound();
 
-            existingEntity.Id = id;
             existingEntity.Username = entity.Username;
             existingEntity.Fullname = entity.Fullname;
             existingEntity.Role = entity.Role;

@@ -109,7 +109,7 @@ namespace Poseidon.RestApi.Logins
         private static JwtConfiguration Config(string key = "key",
             string issuer = "https://example.com",
             string audience = "https://example.com") =>
-            new JwtConfiguration(key, issuer, audience);
+            new JwtConfiguration(key, issuer, audience, TimeSpan.FromMinutes(30));
         private static MockSystemClock Clock(DateTimeOffset dateTime) =>
             new MockSystemClock(dateTime);
         private static JwtAuthenticationService Service(

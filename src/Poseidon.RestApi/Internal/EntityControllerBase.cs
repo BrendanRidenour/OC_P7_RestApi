@@ -5,27 +5,27 @@ namespace Poseidon.RestApi.Internal
 {
     [ApiController]
     [Route("[controller]")]
-    public abstract class EntityControllerBase<T> : EntityControllerHelperBase<T>
-        where T : EntityBase, new()
+    public abstract class EntityControllerBase<TEntity> : EntityControllerHelperBase<TEntity>
+        where TEntity : EntityBase, new()
     {
         protected override string ReadEntityActionName => nameof(Read);
 
-        protected EntityControllerBase(ICrudStore<T> crudStore)
+        protected EntityControllerBase(ICrudStore<TEntity> crudStore)
             : base(crudStore)
         { }
 
         [HttpPost]
-        public virtual Task<ActionResult<T>> Create([FromBody] T entity) =>
+        public virtual Task<ActionResult<TEntity>> Create([FromBody] TEntity entity) =>
             base.CreateEntity(entity);
 
         [HttpGet]
         [Route("{id}")]
-        public virtual Task<ActionResult<T?>> Read([FromRoute] int id) =>
+        public virtual Task<ActionResult<TEntity?>> Read([FromRoute] int id) =>
             base.ReadEntity(id);
 
         [HttpPut]
         [Route("{id}")]
-        public virtual Task<ActionResult> Update([FromRoute] int id, [FromBody] T entity) =>
+        public virtual Task<ActionResult> Update([FromRoute] int id, [FromBody] TEntity entity) =>
             base.UpdateEntity(id, entity);
 
         [HttpDelete]

@@ -16,6 +16,8 @@ namespace Poseidon.RestApi.Internal
 
         protected virtual async Task<ActionResult<T>> CreateEntity(T entity)
         {
+            entity.Id = default;
+
             entity = await this.CrudStore.Create(entity);
             
             return CreatedAtAction(ReadEntityActionName, new { id = entity.Id }, entity);

@@ -1,5 +1,6 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Internal;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -18,26 +19,28 @@ builder.Services.AddTransient<ISystemClock, SystemClock>();
 
 builder.Services.AddTransient<IPasswordHasher, Pbkdf2PasswordHasher>();
 
-builder.Services.AddTransient<ICrudStore<BidEntity>, InMemoryCrudStore<BidEntity>>()
+builder.Services.AddTransient<ICrudStore<BidEntity>, EntityCrudStore<BidEntity>>()
     .AddTransient<IValidator<BidEntity>, BidEntityValidator>();
-builder.Services.AddTransient<ICrudStore<CurvePointEntity>, InMemoryCrudStore<CurvePointEntity>>()
+builder.Services.AddTransient<ICrudStore<CurvePointEntity>, EntityCrudStore<CurvePointEntity>>()
     .AddTransient<IValidator<CurvePointEntity>, CurvePointEntityValidator>();
-builder.Services.AddTransient<ICrudStore<RatingEntity>, InMemoryCrudStore<RatingEntity>>()
+builder.Services.AddTransient<ICrudStore<RatingEntity>, EntityCrudStore<RatingEntity>>()
     .AddTransient<IValidator<RatingEntity>, RatingEntityValidator>();
-builder.Services.AddTransient<ICrudStore<RuleEntity>, InMemoryCrudStore<RuleEntity>>()
+builder.Services.AddTransient<ICrudStore<RuleEntity>, EntityCrudStore<RuleEntity>>()
     .AddTransient<IValidator<RuleEntity>, RuleEntityValidator>();
-builder.Services.AddTransient<ICrudStore<TradeEntity>, InMemoryCrudStore<TradeEntity>>()
+builder.Services.AddTransient<ICrudStore<TradeEntity>, EntityCrudStore<TradeEntity>>()
     .AddTransient<IValidator<TradeEntity>, TradeEntityValidator>();
-builder.Services.AddTransient<ICrudStore<UserEntity>, InMemoryCrudStore<UserEntity>>()
+builder.Services.AddTransient<ICrudStore<UserEntity>, UserEntityCrudStore>()
     .AddTransient<IValidator<UserData>, UserDataValidator>()
     .AddTransient<IValidator<UserEntity>, UserEntityValidator>();
-builder.Services.AddTransient<IReadOperation<Username, UserEntity>, InMemoryCrudStore<UserEntity>>()
+builder.Services.AddTransient<IReadOperation<Username, UserEntity>, UserEntityCrudStore>()
     .AddTransient<IValidator<LoginCredentials>, LoginCredentialsValidator>();
 
 var jwtConfig = new JwtConfiguration(
     key: builder.Configuration["Authentication:Jwt:Key"],
     issuer: builder.Configuration["Authentication:Jwt:Issuer"],
-    audience: builder.Configuration["Authentication:Jwt:Audience"]);
+    audience: builder.Configuration["Authentication:Jwt:Audience"],
+    expiresAfter: TimeSpan.FromMinutes(int.Parse(
+        builder.Configuration["Authentication:Jwt:ExpiresAfterMinutes"])));
 
 builder.Services.AddSingleton(jwtConfig);
 
@@ -68,6 +71,16 @@ builder.Services.AddControllers(mvc =>
         mvc.ModelValidatorProviders.Remove(dataAnnotationsModelValidatorProvider);
 })
     .AddFluentValidation();
+
+var poseidonDbContextConfig = new PoseidonDbContextConfiguration(
+    connectionString: builder.Configuration["Data:SqlServer:ConnectionString"]);
+
+builder.Services.AddSingleton(poseidonDbContextConfig)
+    .AddDbContext<PoseidonDbContext>(db =>
+    {
+        db.UseSqlServer(poseidonDbContextConfig.ConnectionString);
+    });
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(swagger =>
 {
@@ -93,6 +106,26 @@ builder.Services.AddSwaggerGen(swagger =>
         Array.Empty<string>()
     }});
 });
+
+// This class may be controversial. However, read the documentation inside the MagicUsers class
+// for the reasons I included it. I'm happy to refactor upon request.
+builder.Services.AddSingleton(new MagicUsers(
+    admin: new UserEntity()
+    {
+        Id = int.Parse(builder.Configuration["Authentication:MagicUsers:Admin:Id"]),
+        Username = builder.Configuration["Authentication:MagicUsers:Admin:Username"],
+        Password = builder.Configuration["Authentication:MagicUsers:Admin:Password"],
+        Fullname = builder.Configuration["Authentication:MagicUsers:Admin:Fullname"],
+        Role = builder.Configuration["Authentication:MagicUsers:Admin:Role"],
+    },
+    user: new UserEntity()
+    {
+        Id = int.Parse(builder.Configuration["Authentication:MagicUsers:User:Id"]),
+        Username = builder.Configuration["Authentication:MagicUsers:User:Username"],
+        Password = builder.Configuration["Authentication:MagicUsers:User:Password"],
+        Fullname = builder.Configuration["Authentication:MagicUsers:User:Fullname"],
+        Role = builder.Configuration["Authentication:MagicUsers:User:Role"],
+    }));
 
 var app = builder.Build();
 

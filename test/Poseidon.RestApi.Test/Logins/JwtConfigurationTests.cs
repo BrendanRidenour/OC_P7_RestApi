@@ -13,7 +13,8 @@ namespace Poseidon.RestApi.Logins
         {
             var domain = "https://example.com";
 
-            var config = new JwtConfiguration("key", issuer: domain, audience: domain);
+            var config = new JwtConfiguration("key", issuer: domain, audience: domain,
+                expiresAfter: TimeSpan.FromMinutes(30));
 
             Assert.Equal(JwtBearerDefaults.AuthenticationScheme,
                 config.AuthenticationScheme);
@@ -26,21 +27,26 @@ namespace Poseidon.RestApi.Logins
         {
             var domain = "https://example.com";
 
-            var config = new JwtConfiguration(key, issuer: domain, audience: domain);
+            var config = new JwtConfiguration(key, issuer: domain, audience: domain,
+                expiresAfter: TimeSpan.FromMinutes(30));
 
             var expected = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
 
             Assert.Equal(expected.Key, config.IssuerSigningKey.Key);
         }
 
-        [Fact]
-        public void Constructor_WhenCalled_SetsExpiresAfterTo30Minutes()
+        [Theory]
+        [InlineData(1)]
+        [InlineData(2)]
+        public void Constructor_WhenCalled_SetsExpiresAfterToMinutes(
+            int expiresAfterMinutes)
         {
             var domain = "https://example.com";
 
-            var config = new JwtConfiguration("key", issuer: domain, audience: domain);
+            var config = new JwtConfiguration("key", issuer: domain, audience: domain,
+                expiresAfter: TimeSpan.FromMinutes(expiresAfterMinutes));
 
-            Assert.Equal(TimeSpan.FromMinutes(30), config.ExpiresAfter);
+            Assert.Equal(TimeSpan.FromMinutes(expiresAfterMinutes), config.ExpiresAfter);
         }
     }
 }
