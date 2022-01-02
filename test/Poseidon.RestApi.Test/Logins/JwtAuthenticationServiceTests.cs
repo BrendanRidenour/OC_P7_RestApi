@@ -6,7 +6,6 @@ using Poseidon.RestApi.Users;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Security.Principal;
 using Xunit;
 
 namespace Poseidon.RestApi.Logins
@@ -44,7 +43,7 @@ namespace Poseidon.RestApi.Logins
         {
             var service = Service();
 
-            var result = service.ParseUserData(principal: null!);
+            var result = service.ParseUserData(principal: null);
 
             Assert.Null(result);
         }
@@ -62,23 +61,9 @@ namespace Poseidon.RestApi.Logins
         }
 
         [Fact]
-        public void ParseUserData_IdentityHasWrongAuthenticationType_ReturnsNull()
+        public void ParseUserData_PrincipalClaimsDoNotContainJwtMarkerClaim_ReturnsNull()
         {
-            var identity = new ClaimsIdentity(authenticationType: null);
-            var principal = new ClaimsPrincipal(identity);
-            var service = Service();
-
-            var result = service.ParseUserData(principal);
-
-            Assert.Null(result);
-        }
-
-        [Fact]
-        public void ParseUserData_IdentityIsNotAuthenticated_ReturnsNull()
-        {
-            var identity = new MockClaimsIdentity(
-                authenticationType: JwtBearerDefaults.AuthenticationScheme,
-                isAuthenticated: false);
+            var identity = new ClaimsIdentity(Array.Empty<Claim>());
             var principal = new ClaimsPrincipal(identity);
             var service = Service();
 
@@ -143,13 +128,15 @@ namespace Poseidon.RestApi.Logins
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
-        private static Claim[] Claims(UserEntity user) => new Claim[]
-        {
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new Claim(ClaimTypes.Name, user.Username),
-            new Claim(ClaimTypes.GivenName, user.Fullname),
-            new Claim(ClaimTypes.Role, user.Role),
-        };
+        private static Claim[] Claims(UserEntity user) =>
+            new Claim[]
+            {
+                new Claim(ClaimTypes.AuthenticationMethod, "jwt"),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Name, user.Username),
+                new Claim(ClaimTypes.GivenName, user.Fullname),
+                new Claim(ClaimTypes.Role, user.Role),
+            };
         private static ClaimsPrincipal Principal(UserEntity user)
         {
             var identity = new ClaimsIdentity(Claims(user),

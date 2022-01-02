@@ -7,6 +7,7 @@ using Microsoft.OpenApi.Models;
 using Poseidon.RestApi.Bids;
 using Poseidon.RestApi.CurvePoints;
 using Poseidon.RestApi.Data;
+using Poseidon.RestApi.Logging;
 using Poseidon.RestApi.Logins;
 using Poseidon.RestApi.Ratings;
 using Poseidon.RestApi.Rules;
@@ -14,6 +15,8 @@ using Poseidon.RestApi.Trades;
 using Poseidon.RestApi.Users;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddLogging();
 
 builder.Services.AddTransient<ISystemClock, SystemClock>();
 
@@ -45,7 +48,7 @@ var jwtConfig = new JwtConfiguration(
 builder.Services.AddSingleton(jwtConfig);
 
 builder.Services.AddAuthentication(jwtConfig.AuthenticationScheme)
-    .AddJwtBearer(jwt =>
+    .AddJwtBearer(jwtConfig.AuthenticationScheme, jwt =>
     {
         jwt.TokenValidationParameters = new TokenValidationParameters()
         {
@@ -146,6 +149,8 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseMiddleware<UserActionLoggingMiddleware>();
 
 app.MapControllers();
 

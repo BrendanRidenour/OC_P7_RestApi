@@ -6,6 +6,6 @@ namespace Poseidon.RestApi.Logins
     public interface IJwtAuthenticationService
     {
         string CreateJwtToken(UserEntity user);
-        IUserData? ParseUserData(ClaimsPrincipal principal);
+        IUserData? ParseUserData(ClaimsPrincipal? principal);
     }
 }

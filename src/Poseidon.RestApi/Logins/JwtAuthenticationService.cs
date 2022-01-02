@@ -10,6 +10,7 @@ namespace Poseidon.RestApi.Logins
     {
         private readonly JwtConfiguration _jwtConfig;
         private readonly ISystemClock _clock;
+        private readonly Claim _jwtMarkerClaim = new Claim(ClaimTypes.AuthenticationMethod, "jwt");
 
         public JwtAuthenticationService(JwtConfiguration jwtConfig, ISystemClock clock)
         {
@@ -37,30 +38,32 @@ namespace Poseidon.RestApi.Logins
             return handler.WriteToken(token);
         }
 
-        public IUserData? ParseUserData(ClaimsPrincipal principal)
+        public IUserData? ParseUserData(ClaimsPrincipal? principal)
         {
-            var identity = principal?.Identities?.SingleOrDefault(
-                p => p.AuthenticationType == this._jwtConfig.AuthenticationScheme);
+            var claimsContainJwtMarker = principal?.Claims?.Where(c =>
+            {
+                return c.Type == this._jwtMarkerClaim.Type &&
+                    c.Value == this._jwtMarkerClaim.Value;
+            }).Any() ?? false;
 
-            if (identity is null || !identity.IsAuthenticated)
+            if (!claimsContainJwtMarker)
                 return null;
 
-            return ParseClaims(identity);
+            return ParseClaims(principal!.Claims);
         }
 
         protected Claim[] CreateClaims(UserEntity user) => new Claim[]
         {
+            new Claim(this._jwtMarkerClaim.Type, this._jwtMarkerClaim.Value),
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             new Claim(ClaimTypes.Name, user.Username),
             new Claim(ClaimTypes.GivenName, user.Fullname),
             new Claim(ClaimTypes.Role, user.Role),
         };
 
-        protected IUserData ParseClaims(ClaimsIdentity identity)
+        protected IUserData ParseClaims(IEnumerable<Claim> claims)
         {
-            var claims = identity.Claims;
-
-            return new UserEntity()
+            return new UserData()
             {
                 Id = int.Parse(claims.Single(c => c.Type == ClaimTypes.NameIdentifier).Value),
                 Username = claims.Single(c => c.Type == ClaimTypes.Name).Value,
