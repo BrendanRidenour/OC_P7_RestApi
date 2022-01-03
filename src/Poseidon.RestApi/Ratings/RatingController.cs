@@ -4,7 +4,7 @@ using Poseidon.RestApi.Internal;
 
 namespace Poseidon.RestApi.Ratings
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class RatingController : EntityControllerBase<RatingEntity>
     {
         public RatingController(ICrudStore<RatingEntity> crudStore)

@@ -5,7 +5,7 @@ using Poseidon.RestApi.Internal;
 
 namespace Poseidon.RestApi.Bids
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [Route("BidList")]
     public class BidController : EntityControllerBase<BidEntity>
     {

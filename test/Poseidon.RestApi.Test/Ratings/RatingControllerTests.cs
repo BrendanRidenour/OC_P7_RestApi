@@ -13,6 +13,7 @@ namespace Poseidon.RestApi.Ratings
             var attribute = GetClassAttribute<RatingController, AuthorizeAttribute>();
 
             Assert.NotNull(attribute);
+            Assert.Equal("Admin", attribute.Roles);
         }
 
         [Fact]

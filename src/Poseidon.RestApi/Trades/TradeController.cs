@@ -4,7 +4,7 @@ using Poseidon.RestApi.Internal;
 
 namespace Poseidon.RestApi.Trades
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class TradeController : EntityControllerBase<TradeEntity>
     {
         public TradeController(ICrudStore<TradeEntity> crudStore)

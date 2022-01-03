@@ -6,7 +6,7 @@ using Poseidon.RestApi.Logins;
 
 namespace Poseidon.RestApi.Users
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [ApiController]
     [Route("[controller]")]
     public class UserController : EntityControllerHelperBase<UserEntity>

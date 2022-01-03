@@ -13,6 +13,7 @@ namespace Poseidon.RestApi.CurvePoints
             var attribute = GetClassAttribute<CurvePointController, AuthorizeAttribute>();
 
             Assert.NotNull(attribute);
+            Assert.Equal("Admin", attribute.Roles);
         }
 
         [Fact]

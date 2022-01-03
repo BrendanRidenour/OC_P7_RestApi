@@ -23,6 +23,7 @@ namespace Poseidon.RestApi.Users
             var attribute = GetClassAttribute<UserController, AuthorizeAttribute>();
 
             Assert.NotNull(attribute);
+            Assert.Equal("Admin", attribute.Roles);
         }
 
         [Fact]

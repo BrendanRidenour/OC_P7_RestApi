@@ -13,6 +13,7 @@ namespace Poseidon.RestApi.Rules
             var attribute = GetClassAttribute<RuleController, AuthorizeAttribute>();
 
             Assert.NotNull(attribute);
+            Assert.Equal("Admin", attribute.Roles);
         }
 
         [Fact]

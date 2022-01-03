@@ -22,6 +22,7 @@ namespace Poseidon.RestApi.Bids
             var attribute = GetClassAttribute<BidController, AuthorizeAttribute>();
 
             Assert.NotNull(attribute);
+            Assert.Equal("Admin", attribute.Roles);
         }
 
         [Fact]

@@ -13,6 +13,7 @@ namespace Poseidon.RestApi.Trades
             var attribute = GetClassAttribute<TradeController, AuthorizeAttribute>();
 
             Assert.NotNull(attribute);
+            Assert.Equal("Admin", attribute.Roles);
         }
 
         [Fact]
