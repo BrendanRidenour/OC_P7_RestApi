@@ -117,12 +117,13 @@ namespace Poseidon.RestApi.Internal
         public async Task UpdateEntity_WhenCalled_CallsUpdateOnCrudStoreWithCorrectId(int id)
         {
             var crudStore = CrudStore();
+            crudStore.Read_Result!.Id = id;
             var controller = Controller(crudStore);
             var entity = CreateEntity(id: 0);
 
             await controller.UpdateEntity(id, entity);
 
-            Assert.Equal(entity, crudStore.Update_InputEntity);
+            Assert.Equal(crudStore.Read_Result, crudStore.Update_InputEntity);
             Assert.Equal(id, crudStore.Update_InputEntity!.Id);
         }
 

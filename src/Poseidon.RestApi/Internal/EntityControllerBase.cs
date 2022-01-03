@@ -6,7 +6,7 @@ namespace Poseidon.RestApi.Internal
     [ApiController]
     [Route("[controller]")]
     public abstract class EntityControllerBase<TEntity> : EntityControllerHelperBase<TEntity>
-        where TEntity : EntityBase, new()
+        where TEntity : EntityBase, IEntityBasePropertyCopy<TEntity>, new()
     {
         protected override string ReadEntityActionName => nameof(Read);
 

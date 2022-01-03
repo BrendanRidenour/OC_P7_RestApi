@@ -4,7 +4,7 @@ using Poseidon.RestApi.Data;
 namespace Poseidon.RestApi.Internal
 {
     public abstract class EntityControllerHelperBase<T> : ControllerBase
-        where T : EntityBase, new()
+        where T : EntityBase, IEntityBasePropertyCopy<T>, new()
     {
         protected ICrudStore<T> CrudStore { get; }
         protected abstract string ReadEntityActionName { get; }
@@ -39,9 +39,9 @@ namespace Poseidon.RestApi.Internal
             if (existingEntity is null)
                 return NotFound();
 
-            entity.Id = id;
+            existingEntity.CopyProperties(entity);
 
-            await this.CrudStore.Update(entity);
+            await this.CrudStore.Update(existingEntity);
 
             return NoContent();
         }
