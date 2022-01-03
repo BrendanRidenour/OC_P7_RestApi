@@ -10,8 +10,6 @@ namespace Poseidon.RestApi.Data
 {
     public class PoseidonDbContext : DbContext
     {
-        private readonly PoseidonDbContextConfiguration _config;
-
         public DbSet<BidEntity> Bids { get; set; } = null!;
         public DbSet<TradeEntity> Trades { get; set; } = null!;
         public DbSet<CurvePointEntity> CurvePoints { get; set; } = null!;
@@ -19,17 +17,7 @@ namespace Poseidon.RestApi.Data
         public DbSet<RuleEntity> Rules { get; set; } = null!;
         public DbSet<UserEntity> Users { get; set; } = null!;
 
-        public PoseidonDbContext(DbContextOptions<PoseidonDbContext> options,
-            PoseidonDbContextConfiguration config)
-            : base(options)
-        {
-            this._config = config;
-        }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer(this._config.ConnectionString);
-        }
+        public PoseidonDbContext(DbContextOptions<PoseidonDbContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

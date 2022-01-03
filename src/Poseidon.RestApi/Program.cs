@@ -75,13 +75,9 @@ builder.Services.AddControllers(mvc =>
 })
     .AddFluentValidation();
 
-var poseidonDbContextConfig = new PoseidonDbContextConfiguration(
-    connectionString: builder.Configuration["Data:SqlServer:ConnectionString"]);
-
-builder.Services.AddSingleton(poseidonDbContextConfig)
-    .AddDbContext<PoseidonDbContext>(db =>
+builder.Services.AddDbContext<PoseidonDbContext>(db =>
     {
-        db.UseSqlServer(poseidonDbContextConfig.ConnectionString);
+        db.UseSqlServer(builder.Configuration["Data:SqlServer:ConnectionString"]);
     });
 
 builder.Services.AddEndpointsApiExplorer();

@@ -32,6 +32,6 @@ namespace Poseidon.RestApi.Logging
         }
 
         private static string WriteUserActionToLog(HttpContext context, IUserData user) =>
-            $"A User with the Id '{user.Id}' performed a '{context.Request.Method}' to the endpoint '{context.Request.GetDisplayUrl()}'.";
+            $"A User with the Id '{user.Id}' and the role '{user.Role}' performed a '{context.Request.Method}' to the endpoint '{context.Request.GetDisplayUrl()}'.";
     }
 }

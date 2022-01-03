@@ -17,7 +17,7 @@ namespace Poseidon.RestApi.Mocks
 
         public ClaimsPrincipal? ParseUserData_InputPrincipal;
         public IUserData? ParseUserData_Result;
-        public IUserData? ParseUserData(ClaimsPrincipal principal)
+        public IUserData? ParseUserData(ClaimsPrincipal? principal)
         {
             this.ParseUserData_InputPrincipal = principal;
 
