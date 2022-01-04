@@ -2,8 +2,14 @@
 
 namespace Poseidon.RestApi.CurvePoints
 {
+    /// <summary>
+    /// Provides model validation for the <see cref="CurvePointEntity" />
+    /// </summary>
     public class CurvePointEntityValidator : AbstractValidator<CurvePointEntity>
     {
+        /// <summary>
+        /// Instantiates the validator and configures validation rules
+        /// </summary>
         public CurvePointEntityValidator()
         {
             RuleFor(e => e.CurveId)

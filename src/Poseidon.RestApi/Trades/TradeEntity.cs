@@ -3,6 +3,9 @@ using System.Text.Json.Serialization;
 
 namespace Poseidon.RestApi.Trades
 {
+    /// <summary>
+    /// Represents a <see cref="BidEntity" /> model class
+    /// </summary>
     public class TradeEntity : TradeEntityBase, IEntityBasePropertyCopy<TradeEntity>
     {
         [JsonPropertyName("TradeId")]
@@ -13,6 +16,7 @@ namespace Poseidon.RestApi.Trades
         public double? SellPrice { get; set; }
         public DateTimeOffset? TradeDate { get; set; }
 
+        /// <inheritdoc />
         public void CopyProperties(TradeEntity entity)
         {
             base.CopyProperties(entity);

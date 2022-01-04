@@ -4,8 +4,12 @@ using Poseidon.RestApi.Ratings;
 
 namespace Poseidon.RestApi.Data
 {
+    /// <summary>
+    /// Configures the <see cref="RatingEntity"/> for use within Entity Framework
+    /// </summary>
     public class RatingEntityTypeConfiguration : EntityTypeConfigurationBase<RatingEntity>
     {
+        /// <inheritdoc />
         public override void Configure(EntityTypeBuilder<RatingEntity> builder)
         {
             builder.ToTable("Rating");

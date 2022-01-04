@@ -2,6 +2,9 @@
 
 namespace Poseidon.RestApi.Bids
 {
+    /// <summary>
+    /// Represents a <see cref="BidEntity" /> model class
+    /// </summary>
     public class BidEntity : Internal.TradeEntityBase, Internal.IEntityBasePropertyCopy<BidEntity>
     {
         [JsonPropertyName("BidListId")]
@@ -13,6 +16,7 @@ namespace Poseidon.RestApi.Bids
         public DateTimeOffset? BidListDate { get; set; }
         public string? Commentary { get; set; }
 
+        /// <inheritdoc />
         public void CopyProperties(BidEntity entity)
         {
             base.CopyProperties(entity);

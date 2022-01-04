@@ -6,6 +6,9 @@ using System.Security.Claims;
 
 namespace Poseidon.RestApi.Logins
 {
+    /// <summary>
+    /// The JWT authentication service used to create JWT tokens and parse authenticated <see cref="UserData"/>
+    /// </summary>
     public class JwtAuthenticationService : IJwtAuthenticationService
     {
         private readonly JwtConfiguration _jwtConfig;
@@ -18,6 +21,11 @@ namespace Poseidon.RestApi.Logins
             this._clock = clock;
         }
 
+        /// <summary>
+        /// Creates a new JWT token for the given <paramref name="user"/>
+        /// </summary>
+        /// <param name="user">The user to create a token for</param>
+        /// <returns>A new JWT token</returns>
         public string CreateJwtToken(UserEntity user)
         {
             var securityKey = this._jwtConfig.IssuerSigningKey;
@@ -38,6 +46,11 @@ namespace Poseidon.RestApi.Logins
             return handler.WriteToken(token);
         }
 
+        /// <summary>
+        /// Parse <see cref="UserData"/> from a <see cref="ClaimsPrincipal"/>
+        /// </summary>
+        /// <param name="principal">The principal to inspect for <see cref="UserData"/></param>
+        /// <returns><see cref="UserData"/> associated with the <paramref name="principal"/>, or null</returns>
         public IUserData? ParseUserData(ClaimsPrincipal? principal)
         {
             var claimsContainJwtMarker = principal?.Claims?.Where(c =>

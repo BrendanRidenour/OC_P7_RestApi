@@ -2,6 +2,9 @@
 
 namespace Poseidon.RestApi.CurvePoints
 {
+    /// <summary>
+    /// Represents a <see cref="CurvePointEntity" /> model class
+    /// </summary>
     public class CurvePointEntity : EntityBase, IEntityBasePropertyCopy<CurvePointEntity>
     {
         public int? CurveId { get; set; }
@@ -10,6 +13,7 @@ namespace Poseidon.RestApi.CurvePoints
         public double? Value { get; set; }
         public DateTimeOffset? CreationDate { get; set; }
 
+        /// <inheritdoc />
         public void CopyProperties(CurvePointEntity entity)
         {
             CurveId = entity.CurveId;

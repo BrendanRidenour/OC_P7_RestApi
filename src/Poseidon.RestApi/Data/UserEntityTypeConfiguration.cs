@@ -4,8 +4,12 @@ using Poseidon.RestApi.Users;
 
 namespace Poseidon.RestApi.Data
 {
+    /// <summary>
+    /// Configures the <see cref="UserEntity"/> for use within Entity Framework
+    /// </summary>
     public class UserEntityTypeConfiguration : EntityTypeConfigurationBase<UserEntity>
     {
+        /// <inheritdoc />
         public override void Configure(EntityTypeBuilder<UserEntity> builder)
         {
             builder.ToTable("Users");

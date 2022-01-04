@@ -3,11 +3,19 @@ using Poseidon.RestApi.Internal;
 
 namespace Poseidon.RestApi.Data
 {
+    /// <summary>
+    /// A class to perform CRUD operations against an entity
+    /// </summary>
+    /// <typeparam name="TEntity">The entity type on which to perform CRUD operations</typeparam>
     public class EntityCrudStore<TEntity> : ICrudStore<TEntity>
         where TEntity : EntityBase, new()
     {
         protected PoseidonDbContext Db;
 
+        /// <summary>
+        /// Instantiates the class
+        /// </summary>
+        /// <param name="db">The Entity Framework data context to use to perform CRUD operations</param>
         public EntityCrudStore(PoseidonDbContext db)
         {
             this.Db = db;

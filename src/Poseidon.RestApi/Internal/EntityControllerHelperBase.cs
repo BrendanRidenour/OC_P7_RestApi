@@ -3,6 +3,10 @@ using Poseidon.RestApi.Data;
 
 namespace Poseidon.RestApi.Internal
 {
+    /// <summary>
+    /// A base controller with helper methods that make API CRUD operations easier
+    /// </summary>
+    /// <typeparam name="T">The entity on which to perform CRUD operations</typeparam>
     public abstract class EntityControllerHelperBase<T> : ControllerBase
         where T : EntityBase, IEntityBasePropertyCopy<T>, new()
     {

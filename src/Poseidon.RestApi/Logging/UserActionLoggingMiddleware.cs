@@ -4,12 +4,21 @@ using Poseidon.RestApi.Users;
 
 namespace Poseidon.RestApi.Logging
 {
+    /// <summary>
+    /// A class used for logging authenticated <see cref="UserEntity"/> actions
+    /// </summary>
     public class UserActionLoggingMiddleware
     {
         private readonly RequestDelegate _next;
         private readonly IJwtAuthenticationService _jwtAuthenticationService;
         private ILogger<UserActionLoggingMiddleware> _logger;
 
+        /// <summary>
+        /// Instantiates the class
+        /// </summary>
+        /// <param name="next">The next command in the middleware pipeline</param>
+        /// <param name="jwtAuthenticationService">The authentication service required to parse <see cref="UserEntity"/> information</param>
+        /// <param name="logger">The logger required to log authenticated <see cref="UserEntity"/> actions</param>
         public UserActionLoggingMiddleware(RequestDelegate next,
             IJwtAuthenticationService jwtAuthenticationService,
             ILogger<UserActionLoggingMiddleware> logger)
@@ -19,6 +28,10 @@ namespace Poseidon.RestApi.Logging
             _logger = logger;
         }
 
+        /// <summary>
+        /// Performs <see cref="UserEntity"/> logging if one is authenticated
+        /// </summary>
+        /// <param name="context">The context of the current HTTP request</param>
         public async Task InvokeAsync(HttpContext context)
         {
             var principal = context.User;

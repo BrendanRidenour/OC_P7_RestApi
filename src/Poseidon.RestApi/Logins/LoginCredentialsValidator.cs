@@ -2,8 +2,14 @@
 
 namespace Poseidon.RestApi.Logins
 {
+    /// <summary>
+    /// Provides model validation for the <see cref="LoginCredentials" />
+    /// </summary>
     public class LoginCredentialsValidator : AbstractValidator<LoginCredentials>
     {
+        /// <summary>
+        /// Instantiates the validator and configures validation rules
+        /// </summary>
         public LoginCredentialsValidator()
         {
             RuleFor(l => l.Username)

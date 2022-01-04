@@ -3,8 +3,14 @@ using Poseidon.RestApi.Internal;
 
 namespace Poseidon.RestApi.Bids
 {
+    /// <summary>
+    /// Provides model validation for the <see cref="BidEntity" />
+    /// </summary>
     public class BidEntityValidator : TradeEntityValidatorBase<BidEntity>
     {
+        /// <summary>
+        /// Instantiates the validator and configures validation rules
+        /// </summary>
         public BidEntityValidator()
         {
             RuleFor(e => e.BidQuantity)

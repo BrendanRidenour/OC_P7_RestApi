@@ -2,12 +2,20 @@
 
 namespace Poseidon.RestApi.Logins
 {
+    /// <summary>
+    /// A password hasher implementation based on <see cref="Rfc2898DeriveBytes"/>
+    /// </summary>
     public class Pbkdf2PasswordHasher : IPasswordHasher
     {
         private static readonly int HashSize = 256 / 8;
         private static readonly int SaltSize = 128 / 8;
         protected int Iterations { get; } = 25000;
 
+        /// <summary>
+        /// Hashes a password
+        /// </summary>
+        /// <param name="password">The plain text password to hash</param>
+        /// <returns>The hashed password</returns>
         public string Hash(string password)
         {
             using var cipher = new Rfc2898DeriveBytes(password, SaltSize,
@@ -20,6 +28,12 @@ namespace Poseidon.RestApi.Logins
             return $"{this.Iterations}.{Convert.ToBase64String(concat)}";
         }
 
+        /// <summary>
+        /// Validates a password <paramref name="hash"/> against a plain text <paramref name="password"/>
+        /// </summary>
+        /// <param name="hash">The password hash to validate against</param>
+        /// <param name="password">The password to validate</param>
+        /// <returns>True if the password is valid or false</returns>
         public bool Validate(string hash, string password)
         {
             try

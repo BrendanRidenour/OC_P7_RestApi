@@ -8,6 +8,9 @@ using Poseidon.RestApi.Users;
 
 namespace Poseidon.RestApi.Data
 {
+    /// <summary>
+    /// The class used to interact with the Entity Framework database
+    /// </summary>
     public class PoseidonDbContext : DbContext
     {
         public DbSet<BidEntity> Bids { get; set; } = null!;
@@ -17,8 +20,16 @@ namespace Poseidon.RestApi.Data
         public DbSet<RuleEntity> Rules { get; set; } = null!;
         public DbSet<UserEntity> Users { get; set; } = null!;
 
+        /// <summary>
+        /// Instantiates the class
+        /// </summary>
+        /// <param name="options">The options required for operation</param>
         public PoseidonDbContext(DbContextOptions<PoseidonDbContext> options) : base(options) { }
-
+        
+        /// <summary>
+        /// Applies configuration to the given <paramref name="modelBuilder"/>
+        /// </summary>
+        /// <param name="modelBuilder">The builder to configure</param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new BidEntityTypeConfiguration());

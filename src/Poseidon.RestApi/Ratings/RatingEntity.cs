@@ -2,6 +2,9 @@
 
 namespace Poseidon.RestApi.Ratings
 {
+    /// <summary>
+    /// Represents a <see cref="RatingEntity" /> model class
+    /// </summary>
     public class RatingEntity : EntityBase, IEntityBasePropertyCopy<RatingEntity>
     {
         public string? MoodysRating { get; set; }
@@ -9,6 +12,7 @@ namespace Poseidon.RestApi.Ratings
         public string? FitchRating { get; set; }
         public int? OrderNumber { get; set; }
 
+        /// <inheritdoc />
         public void CopyProperties(RatingEntity entity)
         {
             MoodysRating = entity.MoodysRating;

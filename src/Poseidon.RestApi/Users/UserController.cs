@@ -6,6 +6,9 @@ using Poseidon.RestApi.Logins;
 
 namespace Poseidon.RestApi.Users
 {
+    /// <summary>
+    /// An API controller for handling CRUD operations on the <see cref="UserEntity" /> class
+    /// </summary>
     [Authorize(Roles = "Admin")]
     [ApiController]
     [Route("[controller]")]
@@ -15,6 +18,11 @@ namespace Poseidon.RestApi.Users
 
         protected override string ReadEntityActionName => nameof(Read);
 
+        /// <summary>
+        /// Instantiates the <see cref="UserController" />
+        /// </summary>
+        /// <param name="crudStore">The CRUD store required for operation</param>
+        /// <param name="passwordHasher">The service used for hashing passwords /></param>
         public UserController(ICrudStore<UserEntity> crudStore, IPasswordHasher passwordHasher)
             : base(crudStore)
         {

@@ -3,6 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Poseidon.RestApi.Rules
 {
+    /// <summary>
+    /// Represents a <see cref="BidEntity" /> model class
+    /// </summary>
     public class RuleEntity : EntityBase, IEntityBasePropertyCopy<RuleEntity>
     {
         [Required]
@@ -13,6 +16,7 @@ namespace Poseidon.RestApi.Rules
         public string? SqlStr { get; set; }
         public string? SqlPart { get; set; }
 
+        /// <inheritdoc />
         public void CopyProperties(RuleEntity entity)
         {
             Name = entity.Name;

@@ -4,6 +4,9 @@ using System.Text;
 
 namespace Poseidon.RestApi.Logins
 {
+    /// <summary>
+    /// A class to configure JWT authentication
+    /// </summary>
     public class JwtConfiguration
     {
         public string AuthenticationScheme { get; } = JwtBearerDefaults.AuthenticationScheme;

@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Poseidon.RestApi.Data
 {
+    /// <inheritdoc/>
     public abstract class TradeEntityTypeConfigurationBase<TEntity>
         : EntityTypeConfigurationBase<TEntity>
          where TEntity : Internal.TradeEntityBase
     {
+        /// <inheritdoc/>
         public override void Configure(EntityTypeBuilder<TEntity> builder)
         {
             base.Configure(builder);

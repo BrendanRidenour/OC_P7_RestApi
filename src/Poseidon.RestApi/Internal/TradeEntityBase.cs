@@ -2,6 +2,7 @@
 
 namespace Poseidon.RestApi.Internal
 {
+    /// <inheritdoc/>
     public abstract class TradeEntityBase : EntityBase
     {
         [Required]

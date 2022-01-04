@@ -4,8 +4,12 @@ using Poseidon.RestApi.Trades;
 
 namespace Poseidon.RestApi.Data
 {
+    /// <summary>
+    /// Configures the <see cref="TradeEntity"/> for use within Entity Framework
+    /// </summary>
     public class TradeEntityTypeConfiguration : TradeEntityTypeConfigurationBase<TradeEntity>
     {
+        /// <inheritdoc />
         public override void Configure(EntityTypeBuilder<TradeEntity> builder)
         {
             builder.ToTable("Trade");

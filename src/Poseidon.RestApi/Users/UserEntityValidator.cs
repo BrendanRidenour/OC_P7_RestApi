@@ -4,8 +4,14 @@ using FluentValidation.Validators;
 
 namespace Poseidon.RestApi.Users
 {
+    /// <summary>
+    /// Provides model validation for the <see cref="UserEntity" />
+    /// </summary>
     public class UserEntityValidator : UserDataValidatorBase<UserEntity>
     {
+        /// <summary>
+        /// Instantiates the validator and configures validation rules
+        /// </summary>
         public UserEntityValidator()
         {
             RuleFor(e => e.Password)

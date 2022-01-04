@@ -2,6 +2,9 @@
 
 namespace Poseidon.RestApi.Logins
 {
+    /// <summary>
+    /// Represents a <see cref="LoginCredentials" /> model class
+    /// </summary>
     public class LoginCredentials
     {
         [Required]

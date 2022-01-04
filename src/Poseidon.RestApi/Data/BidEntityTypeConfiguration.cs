@@ -4,8 +4,12 @@ using Poseidon.RestApi.Bids;
 
 namespace Poseidon.RestApi.Data
 {
+    /// <summary>
+    /// Configures the <see cref="BidEntity"/> for use within Entity Framework
+    /// </summary>
     public class BidEntityTypeConfiguration : TradeEntityTypeConfigurationBase<BidEntity>
     {
+        /// <inheritdoc />
         public override void Configure(EntityTypeBuilder<BidEntity> builder)
         {
             builder.ToTable("BidList");

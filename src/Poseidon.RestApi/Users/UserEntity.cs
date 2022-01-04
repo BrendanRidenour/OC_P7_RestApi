@@ -3,6 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Poseidon.RestApi.Users
 {
+    /// <summary>
+    /// Represents a <see cref="UserEntity" /> model class
+    /// </summary>
     public class UserEntity : EntityBase, IUserData, IEntityBasePropertyCopy<UserEntity>
     {
         [Required]
@@ -14,6 +17,7 @@ namespace Poseidon.RestApi.Users
         [Required]
         public string Role { get; set; } = null!;
 
+        /// <inheritdoc />
         public void CopyProperties(UserEntity entity)
         {
             Username = entity.Username;

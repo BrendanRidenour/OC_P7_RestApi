@@ -4,8 +4,12 @@ using Poseidon.RestApi.Rules;
 
 namespace Poseidon.RestApi.Data
 {
+    /// <summary>
+    /// Configures the <see cref="RuleEntity"/> for use within Entity Framework
+    /// </summary>
     public class RuleEntityTypeConfiguration : EntityTypeConfigurationBase<RuleEntity>
     {
+        /// <inheritdoc />
         public override void Configure(EntityTypeBuilder<RuleEntity> builder)
         {
             builder.ToTable("RuleName");

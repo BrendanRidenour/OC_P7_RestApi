@@ -2,6 +2,10 @@
 
 namespace Poseidon.RestApi.Internal
 {
+    /// <summary>
+    /// A base class used for validating entities that inherit <see cref="TradeEntityBase"/>
+    /// </summary>
+    /// <typeparam name="T">The type of entity to validate</typeparam>
     public abstract class TradeEntityValidatorBase<T>
         : AbstractValidator<T>
         where T : TradeEntityBase

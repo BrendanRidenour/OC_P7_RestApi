@@ -2,8 +2,14 @@
 
 namespace Poseidon.RestApi.Rules
 {
+    /// <summary>
+    /// Provides model validation for the <see cref="RuleEntity" />
+    /// </summary>
     public class RuleEntityValidator : AbstractValidator<RuleEntity>
     {
+        /// <summary>
+        /// Instantiates the validator and configures validation rules
+        /// </summary>
         public RuleEntityValidator()
         {
             RuleFor(e => e.Name)
