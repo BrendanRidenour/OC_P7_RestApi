@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Poseidon.RestApi.Internal;
 using Poseidon.RestApi.Mocks;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 using static Poseidon.RestApi.TestHelpers;
@@ -105,10 +107,70 @@ namespace Poseidon.RestApi.Users
         }
 
         [Fact]
+        public void ReadList_HasHttpGetAttribute()
+        {
+            var attribute = GetMethodAttribute<UserController, HttpGetAttribute>(
+                "Read", methodIndex: 0);
+
+            Assert.NotNull(attribute);
+        }
+
+        [Fact]
+        public void ReadList_HasRouteAttribute()
+        {
+            var attribute = GetMethodAttribute<UserController, RouteAttribute>(
+                "Read", methodIndex: 0);
+
+            Assert.NotNull(attribute);
+            Assert.Equal(string.Empty, attribute.Template);
+        }
+
+        [Fact]
+        public async Task ReadList_BaseResultValueIsNull_ReturnsEmptyArray()
+        {
+            var userStore = UserStore();
+            userStore.ReadList_Result = null!;
+            var controller = Controller(userStore);
+
+            var result = await controller.Read();
+
+            Assert.NotNull(result);
+            Assert.Empty(result);
+        }
+
+        [Fact]
+        public async Task ReadList_WhenCalled_ReturnsData()
+        {
+            var userStore = UserStore();
+            var entity1 = UserEntity(id: 1);
+            var entity2 = UserEntity(id: 2);
+            userStore.ReadList_Result = new List<UserEntity>() { entity1, entity2 };
+            var controller = Controller(userStore);
+
+            var result = await controller.Read();
+
+            var data1 = result.ElementAt(0);
+            var data2 = result.ElementAt(1);
+
+            Assert.NotNull(result);
+            Assert.Equal(2, result.Count());
+
+            Assert.Equal(entity1.Id, data1.Id);
+            Assert.Equal(entity1.Username, data1.Username);
+            Assert.Equal(entity1.Fullname, data1.Fullname);
+            Assert.Equal(entity1.Role, data1.Role);
+
+            Assert.Equal(entity2.Id, data2.Id);
+            Assert.Equal(entity2.Username, data2.Username);
+            Assert.Equal(entity2.Fullname, data2.Fullname);
+            Assert.Equal(entity2.Role, data2.Role);
+        }
+
+        [Fact]
         public void Read_HasHttpGetAttribute()
         {
             var attribute = GetMethodAttribute<UserController, HttpGetAttribute>(
-                "Read");
+                "Read", methodIndex: 1);
 
             Assert.NotNull(attribute);
         }
@@ -117,7 +179,7 @@ namespace Poseidon.RestApi.Users
         public void Read_HasRouteAttribute()
         {
             var attribute = GetMethodAttribute<UserController, RouteAttribute>(
-                "Read");
+                "Read", methodIndex: 1);
 
             Assert.NotNull(attribute);
             Assert.Equal("{id}", attribute.Template);
@@ -127,7 +189,7 @@ namespace Poseidon.RestApi.Users
         public void Read_IdParameterHasFromRouteAttribute()
         {
             var attribute = GetParameterAttribute<UserController, FromRouteAttribute>(
-                "Read", "id");
+                "Read", "id", methodIndex: 1);
 
             Assert.NotNull(attribute);
         }

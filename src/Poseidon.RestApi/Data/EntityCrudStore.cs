@@ -1,4 +1,5 @@
-﻿using Poseidon.RestApi.Internal;
+﻿using Microsoft.EntityFrameworkCore;
+using Poseidon.RestApi.Internal;
 
 namespace Poseidon.RestApi.Data
 {
@@ -19,6 +20,9 @@ namespace Poseidon.RestApi.Data
 
             return entity;
         }
+
+        public async Task<IEnumerable<TEntity>> Read() =>
+            await this.Db.Set<TEntity>().ToListAsync();
 
         public async Task<TEntity?> Read(int id) =>
             await this.Db.FindAsync<TEntity>(id);

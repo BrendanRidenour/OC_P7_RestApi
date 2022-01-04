@@ -89,10 +89,41 @@ namespace Poseidon.RestApi.Internal
         }
 
         [Fact]
+        public void ReadList_HasHttpGetAttribute()
+        {
+            var attribute = GetMethodAttribute<EntityControllerBase<BidEntity>, HttpGetAttribute>(
+                "Read", methodIndex: 0);
+
+            Assert.NotNull(attribute);
+        }
+
+        [Fact]
+        public void ReadList_HasRouteAttribute()
+        {
+            var attribute = GetMethodAttribute<EntityControllerBase<BidEntity>, RouteAttribute>(
+                "Read");
+
+            Assert.NotNull(attribute);
+            Assert.Equal(string.Empty, attribute.Template);
+        }
+
+        [Fact]
+        public async Task ReadList_WhenCalled_CallsReadOnCrudStore()
+        {
+            var crudStore = CrudStore();
+            var controller = Controller(crudStore);
+
+            var results = await controller.Read();
+
+            Assert.True(crudStore.ReadList_Called);
+            Assert.Equal(crudStore.ReadList_Result, results);
+        }
+
+        [Fact]
         public void Read_HasHttpGetAttribute()
         {
             var attribute = GetMethodAttribute<EntityControllerBase<BidEntity>, HttpGetAttribute>(
-                "Read");
+                "Read", methodIndex: 1);
 
             Assert.NotNull(attribute);
         }
@@ -101,7 +132,7 @@ namespace Poseidon.RestApi.Internal
         public void Read_HasRouteAttribute()
         {
             var attribute = GetMethodAttribute<EntityControllerBase<BidEntity>, RouteAttribute>(
-                "Read");
+                "Read", methodIndex: 1);
 
             Assert.NotNull(attribute);
             Assert.Equal("{id}", attribute.Template);
@@ -111,7 +142,7 @@ namespace Poseidon.RestApi.Internal
         public void Read_IdParameterHasFromRouteAttribute()
         {
             var attribute = GetParameterAttribute<EntityControllerBase<BidEntity>, FromRouteAttribute>(
-                "Read", "id");
+                "Read", "id", methodIndex: 1);
 
             Assert.NotNull(attribute);
         }

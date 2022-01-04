@@ -106,8 +106,8 @@ builder.Services.AddSwaggerGen(swagger =>
     }});
 });
 
-// This class may be controversial. However, read the documentation inside the MagicUsers class
-// for the reasons I included it. I'm happy to refactor upon request.
+/*  This class may be controversial. However, read the documentation inside the MagicUsers class
+    for the reasons I included it. I'm happy to refactor upon request. */
 builder.Services.AddSingleton(new MagicUsers(
     admin: new UserEntity()
     {

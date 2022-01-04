@@ -1,5 +1,6 @@
 ﻿using Poseidon.RestApi.Data;
 using Poseidon.RestApi.Users;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Poseidon.RestApi.Mocks
@@ -15,6 +16,12 @@ namespace Poseidon.RestApi.Mocks
                 this.Create_Result = entity;
 
             return Task.FromResult(this.Create_Result);
+        }
+
+        public List<UserEntity> ReadList_Result = new List<UserEntity>();
+        public Task<IEnumerable<UserEntity>> Read()
+        {
+            return Task.FromResult<IEnumerable<UserEntity>>(this.ReadList_Result);
         }
 
         public int? Read_InputId;

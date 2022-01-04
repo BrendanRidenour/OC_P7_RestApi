@@ -1,6 +1,7 @@
 ﻿using Poseidon.RestApi.Bids;
 using Poseidon.RestApi.Data;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Poseidon.RestApi.Mocks
@@ -15,6 +16,15 @@ namespace Poseidon.RestApi.Mocks
             this.Create_Result = entity;
 
             return Task.FromResult(entity);
+        }
+
+        public bool ReadList_Called = false;
+        public List<BidEntity> ReadList_Result = new List<BidEntity>();
+        public Task<IEnumerable<BidEntity>> Read()
+        {
+            this.ReadList_Called = true;
+
+            return Task.FromResult<IEnumerable<BidEntity>>(this.ReadList_Result);
         }
 
         public int Read_InputId;

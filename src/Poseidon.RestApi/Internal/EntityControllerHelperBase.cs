@@ -23,6 +23,8 @@ namespace Poseidon.RestApi.Internal
             return CreatedAtAction(ReadEntityActionName, new { id = entity.Id }, entity);
         }
 
+        protected virtual Task<IEnumerable<T>> ReadEntities() => this.CrudStore.Read();
+
         protected virtual async Task<ActionResult<T?>> ReadEntity(int id)
         {
             var entity = await this.CrudStore.Read(id);

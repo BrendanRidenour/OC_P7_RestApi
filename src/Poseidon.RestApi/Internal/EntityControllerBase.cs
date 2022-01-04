@@ -19,6 +19,11 @@ namespace Poseidon.RestApi.Internal
             base.CreateEntity(entity);
 
         [HttpGet]
+        [Route("")]
+        public virtual Task<IEnumerable<TEntity>> Read() =>
+            base.ReadEntities();
+
+        [HttpGet]
         [Route("{id}")]
         public virtual Task<ActionResult<TEntity?>> Read([FromRoute] int id) =>
             base.ReadEntity(id);

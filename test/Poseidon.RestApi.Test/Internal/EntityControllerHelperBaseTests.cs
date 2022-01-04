@@ -2,6 +2,7 @@
 using Poseidon.RestApi.Bids;
 using Poseidon.RestApi.Mocks;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -59,6 +60,18 @@ namespace Poseidon.RestApi.Internal
             Assert.Equal(readEntityActionName, createdResult.ActionName);
             Assert.Equal(entity.Id, createdResult.RouteValues!["id"]);
             Assert.Equal(crudStore.Create_Result, createdResult.Value);
+        }
+
+        [Fact]
+        public async Task ReadEntities_WhenCalled_CallsReadOnCrudStore()
+        {
+            var crudStore = CrudStore();
+            var controller = Controller(crudStore);
+
+            var results = await controller.ReadEntities();
+
+            Assert.True(crudStore.ReadList_Called);
+            Assert.Equal(crudStore.ReadList_Result, results);
         }
 
         [Theory]
@@ -247,6 +260,9 @@ namespace Poseidon.RestApi.Internal
 
             new public Task<ActionResult<BidEntity>> CreateEntity(BidEntity entity) =>
                 base.CreateEntity(entity);
+
+            new public Task<IEnumerable<BidEntity>> ReadEntities() =>
+                base.ReadEntities();
 
             new public Task<ActionResult<BidEntity?>> ReadEntity(int id) =>
                 base.ReadEntity(id);

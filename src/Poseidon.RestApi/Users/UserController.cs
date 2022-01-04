@@ -15,8 +15,7 @@ namespace Poseidon.RestApi.Users
 
         protected override string ReadEntityActionName => nameof(Read);
 
-        public UserController(ICrudStore<UserEntity> crudStore,
-            IPasswordHasher passwordHasher)
+        public UserController(ICrudStore<UserEntity> crudStore, IPasswordHasher passwordHasher)
             : base(crudStore)
         {
             this._passwordHasher = passwordHasher;
@@ -39,6 +38,15 @@ namespace Poseidon.RestApi.Users
                 controllerName: createdAtResult.ControllerName,
                 routeValues: createdAtResult.RouteValues,
                 value: userData);
+        }
+
+        [HttpGet]
+        [Route("")]
+        public async Task<IEnumerable<UserData>> Read()
+        {
+            var users = await base.ReadEntities();
+
+            return users?.Select(user => new UserData(user)) ?? Array.Empty<UserData>();
         }
 
         [HttpGet]

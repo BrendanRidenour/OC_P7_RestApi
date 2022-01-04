@@ -4,6 +4,7 @@
         where T : Internal.EntityBase
     {
         Task<T> Create(T entity);
+        Task<IEnumerable<T>> Read();
         Task<T> Update(T entity);
         Task Delete(int id);
     }
