@@ -34,10 +34,10 @@ namespace Poseidon.RestApi.Users
         {
             entity.Password = this._passwordHasher.Hash(entity.Password);
 
-            var baseResult = await base.CreateEntity(entity);
+            var baseResult = await this.CreateEntity(entity);
 
             if (baseResult.Result is not CreatedAtActionResult createdAtResult)
-                throw new InvalidOperationException("Unexpected ActionResult returned from base class");
+                throw new InvalidOperationException($"Unexpected ActionResult returned from {nameof(CreateEntity)} method: '{baseResult.Result?.GetType().Name}'");
 
             var userData = new UserData((UserEntity)createdAtResult.Value!);
 

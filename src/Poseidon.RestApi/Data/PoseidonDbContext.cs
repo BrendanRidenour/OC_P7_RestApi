@@ -23,7 +23,7 @@ namespace Poseidon.RestApi.Data
         /// <summary>
         /// Instantiates the class
         /// </summary>
-        /// <param name="options">The options required for operation</param>
+        /// <param name="options">The options required for operation and configuration</param>
         public PoseidonDbContext(DbContextOptions<PoseidonDbContext> options) : base(options) { }
         
         /// <summary>

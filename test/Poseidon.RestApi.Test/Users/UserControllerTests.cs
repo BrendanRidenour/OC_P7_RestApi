@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Poseidon.RestApi.Data;
 using Poseidon.RestApi.Internal;
+using Poseidon.RestApi.Logins;
 using Poseidon.RestApi.Mocks;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -79,6 +82,20 @@ namespace Poseidon.RestApi.Users
             Assert.Equal(passwordHasher.Hash_Result,
                 userStore.Create_InputEntity!.Password);
             Assert.Equal(user, userStore.Create_InputEntity);
+        }
+
+        [Fact]
+        public async Task Create_WhenBaseCreateEntityReturnsNotCreatedAtActionResult_Throws()
+        {
+            var controller = new TestUserController(UserStore(), PasswordHasher());
+
+            var exception = await Assert.ThrowsAsync<InvalidOperationException>(async () =>
+            {
+                await controller.Create(UserEntity());
+            });
+
+            Assert.Equal($"Unexpected ActionResult returned from CreateEntity method: 'NotFoundResult'",
+                exception.Message);
         }
 
         [Theory]
@@ -393,5 +410,14 @@ namespace Poseidon.RestApi.Users
                 Fullname = fullname,
                 Role = role,
             };
+        private class TestUserController : UserController
+        {
+            public TestUserController(ICrudStore<UserEntity> crudStore, IPasswordHasher passwordHasher)
+                : base(crudStore, passwordHasher)
+            { }
+
+            protected override Task<ActionResult<UserEntity>> CreateEntity(UserEntity entity) =>
+                Task.FromResult<ActionResult<UserEntity>>(NotFound());
+        }
     }
 }
